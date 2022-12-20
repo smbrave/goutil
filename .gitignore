@@ -1,0 +1,11 @@
+*.iml
+.idea/
+output/
+dockerfiles/
+log
+.DS_Store
+doc
+cmd/test
+go.sum
+pkg
+test.go
