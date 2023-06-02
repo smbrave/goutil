@@ -13,6 +13,9 @@ func TimeToDate(t int64) string {
 
 // 时间戳转为datetime格式
 func TimeToDateTime(t int64) string {
+	if t == 0 {
+		return ""
+	}
 	tm := time.Unix(t, 0)
 	return tm.Format("2006-01-02 15:04:05")
 }
