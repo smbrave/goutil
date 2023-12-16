@@ -4,7 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"regexp"
 	"strconv"
+	"strings"
 )
 
 // format bytes number friendly
@@ -88,4 +90,36 @@ func FormatBytes(bytes int64) string {
 		exp++
 	}
 	return fmt.Sprintf("%.2f%cB", float64(bytes)/float64(div), "KMGTPE"[exp])
+}
+
+func HtmlStrip(src string) string {
+	//将HTML标签全转换成小写
+	re, _ := regexp.Compile("\\<[\\S\\s]+?\\>")
+	src = re.ReplaceAllStringFunc(src, strings.ToLower)
+
+	//去除STYLE
+	re, _ = regexp.Compile("\\<style[\\S\\s]+?\\</style\\>")
+	src = re.ReplaceAllString(src, "")
+
+	//去除SCRIPT
+	re, _ = regexp.Compile("\\<script[\\S\\s]+?\\</script\\>")
+	src = re.ReplaceAllString(src, "")
+
+	//去除所有尖括号内的HTML代码，并换成换行符
+	re, _ = regexp.Compile("\\<[\\S\\s]+?\\>")
+	src = re.ReplaceAllString(src, "")
+
+	//去除连续的换行符
+	re, _ = regexp.Compile("\\s{1,}")
+	src = re.ReplaceAllString(src, "")
+
+	//去除&#12345;这类字符
+	//re, _ = regexp.Compile("&#\\d*;")
+	//src = re.ReplaceAllString(src, "")
+
+	src = strings.ReplaceAll(src, "&nbsp;", "")
+	src = strings.ReplaceAll(src, "nbsp;", "")
+	src = strings.ReplaceAll(src, "& nbsp;", "")
+	src = strings.ReplaceAll(src, "&nbsp", "")
+	return strings.TrimSpace(src)
 }
