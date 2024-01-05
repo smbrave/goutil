@@ -9,18 +9,27 @@ import (
 	"strings"
 )
 
-// format bytes number friendly
-func BytesToTips(bytes uint64) string {
-	switch {
-	case bytes < 1024:
-		return fmt.Sprintf("%dB", bytes)
-	case bytes < 1024*1024:
-		return fmt.Sprintf("%.2fK", float64(bytes)/1024)
-	case bytes < 1024*1024*1024:
-		return fmt.Sprintf("%.2fM", float64(bytes)/1024/1024)
-	default:
-		return fmt.Sprintf("%.2fG", float64(bytes)/1024/1024/1024)
+// FormatMoney 格式化商品价格
+func FormatMoney(number int64) string {
+	num1 := float64(number) / 100
+	num2 := float64(number / 100)
+	if num1 != num2 {
+		return fmt.Sprintf("%.2f", num1)
 	}
+	return strconv.FormatInt(int64(num1), 10)
+}
+
+func FormatBytes(bytes int64) string {
+	const unit = 1024
+	if bytes < unit {
+		return strconv.FormatInt(bytes, 10) + " B"
+	}
+	div, exp := int64(unit), 0
+	for n := bytes / unit; n >= unit; n /= unit {
+		div *= unit
+		exp++
+	}
+	return fmt.Sprintf("%.2f%cB", float64(bytes)/float64(div), "KMGTPE"[exp])
 }
 
 func If[T any](condition bool, trueVal, falseVal T) T {
@@ -77,19 +86,6 @@ func CopyStruct(dst interface{}, src interface{}) {
 		}
 	}
 
-}
-
-func FormatBytes(bytes int64) string {
-	const unit = 1024
-	if bytes < unit {
-		return strconv.FormatInt(bytes, 10) + " B"
-	}
-	div, exp := int64(unit), 0
-	for n := bytes / unit; n >= unit; n /= unit {
-		div *= unit
-		exp++
-	}
-	return fmt.Sprintf("%.2f%cB", float64(bytes)/float64(div), "KMGTPE"[exp])
 }
 
 func HtmlStrip(src string) string {
