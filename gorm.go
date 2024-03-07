@@ -38,7 +38,9 @@ func (d *GORMLogger) Trace(ctx context.Context, begin time.Time, fc func() (sql 
 		if d.Threshold > 0 && time.Since(begin).Milliseconds() > d.Threshold {
 			log.Errorf("[SQL]sql=%s affect=%d cost=%dms", sql, affects, time.Since(begin).Milliseconds())
 		} else {
-			log.Debugf("[SQL]sql=%s affect=%d cost=%dms", sql, affects, time.Since(begin).Milliseconds())
+			if len(sql) <= 1000 {
+				log.Debugf("[SQL]sql=%s affect=%d cost=%dms", sql, affects, time.Since(begin).Milliseconds())
+			}
 		}
 	}
 }
