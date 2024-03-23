@@ -19,6 +19,12 @@ func FormatMoney(number int64) string {
 	return strconv.FormatInt(int64(num1), 10)
 }
 
+// FormatMoney 格式化商品价格
+func FormatPercent(number float64) string {
+	val := strings.TrimRight(fmt.Sprintf("%.2f", number), "0.")
+	return val + "%"
+}
+
 func FormatBytes(bytes int64) string {
 	const unit = 1024
 	if bytes < unit {
