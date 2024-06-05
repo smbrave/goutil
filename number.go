@@ -2,6 +2,7 @@ package goutil
 
 import (
 	"crypto/md5"
+	"github.com/speps/go-hashids"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -67,4 +68,20 @@ func Hash32(s string) uint32 {
 		digest += (idx << uint64(i*8))
 	}
 	return digest
+}
+
+func EncryptID(data int64, salt string) string {
+	hd := hashids.NewData()
+	hd.Salt = salt
+	h, _ := hashids.NewWithData(hd)
+	e, _ := h.Encode([]int{int(data)})
+	return e
+}
+
+func DecryptID(data, salt string) int64 {
+	hd := hashids.NewData()
+	hd.Salt = salt
+	h, _ := hashids.NewWithData(hd)
+	e, _ := h.DecodeWithError(data)
+	return int64(e[0])
 }
