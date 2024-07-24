@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -126,4 +127,10 @@ func HtmlStrip(src string) string {
 	src = strings.ReplaceAll(src, "& nbsp;", "")
 	src = strings.ReplaceAll(src, "&nbsp", "")
 	return strings.TrimSpace(src)
+}
+
+func Reverse(s interface{}) {
+	sort.SliceStable(s, func(i, j int) bool {
+		return true
+	})
 }
