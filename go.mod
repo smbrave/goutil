@@ -1,6 +1,6 @@
 module github.com/smbrave/goutil
 
-go 1.18
+go 1.21.4
 
 require (
 	github.com/sirupsen/logrus v1.9.0
