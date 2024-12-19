@@ -26,7 +26,7 @@ func (a *Attenuator) Do(key string, fun func()) bool {
 
 	val := a.memory.Get(key)
 	if val == nil {
-		go fun()
+		fun()
 		a.memory.Set(key, fmt.Sprintf("%d,1", time.Now().Unix()), time.Hour*time.Duration(24*365*100))
 		return true
 	}
@@ -42,7 +42,7 @@ func (a *Attenuator) Do(key string, fun func()) bool {
 		return false
 	}
 
-	go fun()
+	fun()
 	a.memory.Set(key, fmt.Sprintf("%d,%d", nowTime, count), time.Hour*time.Duration(24*365*100))
 	return true
 }
