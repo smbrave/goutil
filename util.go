@@ -20,6 +20,13 @@ func FormatMoney(number int64) string {
 	return strconv.FormatInt(int64(num1), 10)
 }
 
+func FormatFloat(f float64) string {
+	if int64(f*100)%100 == 0 {
+		return fmt.Sprintf("%d", int64(f))
+	}
+	return fmt.Sprintf("%.2f", f)
+}
+
 func FormatPercent(number float64) string {
 	if number*100 == float64(int(number*100)) {
 		return fmt.Sprintf("%d%%", int(number*100))
