@@ -3,11 +3,13 @@ package goutil
 import (
 	"errors"
 	"fmt"
+	"math/rand"
 	"reflect"
 	"regexp"
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // FormatMoney 格式化商品价格
@@ -140,4 +142,41 @@ func Reverse(s interface{}) {
 	sort.SliceStable(s, func(i, j int) bool {
 		return true
 	})
+}
+
+func WeightKeyword(keywords string) string {
+	fields := strings.Split(keywords, ",")
+	if len(fields) == 1 {
+		return keywords
+	}
+
+	sumWeight := int(0)
+	arrWeight := make([]int, 0)
+	arrKey := make([]string, 0)
+
+	for _, field := range fields {
+		field = strings.Trim(field, "\r\t\n ")
+		kvs := strings.SplitN(field, ":", 2)
+		key := strings.Trim(kvs[0], "\r\t\n ")
+		weight := int(0)
+		if len(kvs) > 1 {
+			weight, _ = strconv.Atoi(strings.Trim(kvs[1], "\r\t\n "))
+		}
+		if weight <= 0 {
+			continue
+		}
+		sumWeight += weight
+		arrWeight = append(arrWeight, sumWeight)
+		arrKey = append(arrKey, key)
+	}
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	randWeight := r.Intn(sumWeight)
+
+	for i := 0; i < len(arrWeight); i++ {
+		if randWeight < arrWeight[i] {
+			return arrKey[i]
+		}
+	}
+
+	return ""
 }
