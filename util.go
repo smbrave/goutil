@@ -145,6 +145,8 @@ func Reverse(s interface{}) {
 }
 
 func WeightKeyword(keywords string) string {
+	keywords = strings.ReplaceAll(keywords, "，", ",")
+	keywords = strings.ReplaceAll(keywords, "：", ":")
 	fields := strings.Split(keywords, ",")
 	if len(fields) == 1 {
 		return keywords
